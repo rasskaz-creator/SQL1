@@ -1,0 +1,47 @@
+CREATE TABLE IF NOT EXISTS Artist (
+	artist_id SERIAL PRIMARY KEY,
+	name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Albums(
+	album_id SERIAL PRIMARY KEY,
+	name VARCHAR(100) NOT NULL,
+	year INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Genre (
+	genre_id SERIAL PRIMARY KEY,
+	name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Tracks (
+	track_id SERIAL PRIMARY KEY,
+	name VARCHAR(100) NOT NULL,
+	duration DECIMAL(5, 2) NOT NULL,
+	album_id INTEGER NOT NULL,
+	CONSTRAINT fk_album FOREIGN KEY(album_id) REFERENCES Albums(album_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Compilation (
+	compilation_id SERIAL PRIMARY KEY,
+	name VARCHAR(100) NOT NULL,
+	year INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Artist_genre (
+	artist_id INTEGER NOT NULL REFERENCES Artist(artist_id) ON DELETE CASCADE,
+	genre_id INTEGER NOT NULL REFERENCES Genre(genre_id) ON DELETE CASCADE,
+	CONSTRAINT pk PRIMARY KEY(artist_id, genre_id)
+);
+
+CREATE TABLE IF NOT EXISTS Artist_album (
+	artist_id INTEGER NOT NULL REFERENCES Artist(artist_id) ON DELETE CASCADE,
+	album_id INTEGER NOT NULL REFERENCES Albums(album_id) ON DELETE CASCADE,
+	CONSTRAINT pk_1 PRIMARY KEY(artist_id, album_id)
+);
+
+CREATE TABLE IF NOT EXISTS Compilation_track (
+	compilation_id INTEGER NOT NULL REFERENCES Compilation(compilation_id) ON DELETE CASCADE,
+	track_id INTEGER NOT NULL REFERENCES Tracks(track_id) ON DELETE CASCADE,
+	CONSTRAINT pk_2 PRIMARY KEY(compilation_id, track_id)
+);
